@@ -2,7 +2,7 @@ pipeline{
     agent any
     tools {
         jdk 'jdk17'
-        nodejs 'node24'
+        nodejs 'node16'
     }
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
@@ -30,7 +30,7 @@ pipeline{
         stage ('Quality Gate Check') {
             steps {
                 script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonartoken'
                 }
             }
 
@@ -45,7 +45,7 @@ pipeline{
         stage ('Docker Build and Push') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'dockerhub', toolName: 'docker') {
+                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
                         sh "docker build -t youtube-clone ."
                         sh "docker tag youtube-clone abdraheem98/youtube-clone:latest"
                         sh " docker push abdraheem98/youtube-clone:latest"
